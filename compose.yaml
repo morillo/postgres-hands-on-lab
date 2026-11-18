@@ -1,0 +1,50 @@
+name: pg-lab
+
+services:
+  pg1:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?copy .env.example to .env first}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?copy .env.example to .env first}
+      POSTGRES_DB: ${POSTGRES_DB:?copy .env.example to .env first}
+    command:
+      - postgres
+      - -c
+      - wal_level=logical
+      - -c
+      - max_replication_slots=10
+      - -c
+      - max_wal_senders=10
+    ports:
+      - "55432:5432"
+    volumes:
+      - pg1-data:/var/lib/postgresql/data
+      - ./psqlrc/pg1:/root/.psqlrc:ro
+      - ./sql:/sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h localhost -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  pg2:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?copy .env.example to .env first}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?copy .env.example to .env first}
+      POSTGRES_DB: ${POSTGRES_DB:?copy .env.example to .env first}
+    ports:
+      - "55433:5432"
+    volumes:
+      - pg2-data:/var/lib/postgresql/data
+      - ./psqlrc/pg2:/root/.psqlrc:ro
+      - ./sql:/sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h localhost -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+volumes:
+  pg1-data:
+  pg2-data:
