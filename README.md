@@ -78,7 +78,7 @@ docker compose exec pg1 psql -U lab -d labdb
 
 ## Development
 
-Setup: `uv sync`. The same checks run in CI ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) on every push to `main` and every pull request.
+Setup: `uv sync`. The same checks run in CI ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) on every push to `main`, on every pull request, and on demand from the Actions tab.
 
 ```bash
 uv sync
