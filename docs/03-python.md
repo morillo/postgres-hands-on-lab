@@ -96,6 +96,14 @@ Line by line:
 
 Every script in this lab runs as `uv run --env-file .env python py/<script>.py`. `--env-file .env` loads each `NAME=value` line of `.env` into the environment of that one command; `uv run` then starts the script with the project's Python and packages.
 
+**Running the scripts from VS Code (optional).** The commands above are all you need. To run the scripts from VS Code instead, with the Python extension installed, open the `pg-lab` folder itself (File → Open Folder…), then:
+
+1. Choose the project's Python: Cmd+Shift+P → **Python: Select Interpreter** → the entry for `.venv` (Python 3.13).
+2. Let VS Code pass `.env` to its terminals: Cmd+, → **Workspace** tab → search for `python.terminal.useEnvFile` → tick the box. This writes the setting to `.vscode/settings.json`, which git ignores.
+3. Open a script in `py/` and click **Run Python File** (the ▷ at the top right), or press F5 and choose **Python Debugger: Current File**. The debugger reads `.env` on its own: the setting `python.envFile` points to `${workspaceFolder}/.env` by default.
+
+The output is the same as from `uv run`. If a script prints `PG_DSN is not set`, its terminal was opened before step 2: close it with the trash-can icon and run the script again.
+
 ## 3.2 Connect and query
 
 The script is in the repository at `py/01_basics.py`:
