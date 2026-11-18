@@ -1,0 +1,64 @@
+[project]
+name = "postgres-hands-on-lab"
+version = "0.1.0"
+description = "Hands-on PostgreSQL 17 lab: SQL, Python (psycopg 3, SQLAlchemy 2.0), MVCC, WAL, VACUUM, the planner and logical replication"
+authors = [
+    { name = "Carlos Morillo", email = "2914407+morillo@users.noreply.github.com" }
+]
+license = "Apache-2.0"
+requires-python = ">=3.13"
+dependencies = [
+    "psycopg[binary]>=3.3.9",
+    "sqlalchemy>=2.1.8",
+]
+
+[tool.uv]
+package = false
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.7.0",
+    "pyright>=1.1.414",
+    "pytest>=9.2.0",
+    "ruff>=0.17.5",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.ruff.lint]
+select = [
+    "E", "W",   # pycodestyle
+    "F",        # pyflakes
+    "I",        # isort
+    "B",        # bugbear
+    "UP",       # pyupgrade
+    "SIM",      # simplify
+    "N",        # pep8-naming
+    "D",        # pydocstyle
+    "ANN",      # type annotations
+    "RUF",      # ruff-specific
+    "PL",       # pylint
+    "S",        # bandit (security)
+    "PTH",      # use pathlib
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.isort]
+# py/settings.py (scripts) and tests/conftest.py (tests) are imported as top-level modules.
+known-first-party = ["settings", "conftest"]
+
+[tool.ruff.lint.per-file-ignores]
+# The scripts are numbered in lab order (01_basics.py ...), which is not a valid module name.
+"py/0*.py" = ["N999"]
+# Tests use assert, run the lab scripts as subprocesses, and compare against the
+# literal numbers the docs promise.
+"tests/*.py" = ["S101", "S603", "PLR2004"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["py"]
+addopts = "-ra"
